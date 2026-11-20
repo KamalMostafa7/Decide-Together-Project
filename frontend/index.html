@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="app_name">Decide Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.3;
+        }
+        
+        .hero-section .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-section h1 {
+            font-weight: 800;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .hero-section p {
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .hero-section .btn {
+            animation: fadeInUp 1s ease-out 0.6s both;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 50px;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+            height: 100%;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #0d6efd, #0a58ca);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(13, 110, 253, 0.2) !important;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card i {
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover i {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .auth-card {
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            border-radius: 15px;
+        }
+
+        .auth-card:hover {
+            border-color: #0d6efd;
+            box-shadow: 0 10px 30px rgba(13, 110, 253, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 60px 0;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-box i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #0d6efd, #0a58ca);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-box h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0d6efd;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hands-helping"></i>
+                <span data-key="app_name">Decide Together</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fas fa-home"></i>
+                            <span data-key="nav_home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/browse.html">
+                            <i class="fas fa-th-large"></i>
+                            <span data-key="nav_browse">Browse Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/map.html">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span data-key="nav_map">Reports Map</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="reportNavItem" style="display:none;">
+                        <a class="nav-link" href="/report.html">
+                            <i class="fas fa-plus-circle"></i>
+                            <span data-key="nav_create_report">Create Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="dashboardNavItem" style="display:none;">
+                        <a class="nav-link" href="/dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span data-key="nav_dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="profileNavItem" style="display:none;">
+                        <a class="nav-link" href="/profile.html">
+                            <i class="fas fa-user-circle"></i>
+                            <span data-key="nav_profile">My Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="/login.html">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span data-key="nav_login">Login</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="registerNavItem">
+                        <a class="nav-link" href="/register.html">
+                            <i class="fas fa-user-plus"></i>
+                            <span data-key="nav_register">Register</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown" id="userNavItem" style="display:none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile.html"><i
+                                        class="fas fa-user-circle"></i><span data-key="nav_profile">My
+                                        Profile</span></a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i
+                                        class="fas fa-sign-out-alt"></i><span
+                                        data-key="nav_logout">Logout</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-outline-light" id="langToggle">
+                            <i class="fas fa-language"></i> 
+                            <span id="currentLang">AR</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 mb-4" data-key="hero_title">Welcome to Decide Together</h1>
+            <p class="lead mb-5" data-key="hero_subtitle">Empowering Egyptian Citizens to Report and Resolve Local
+                Issues</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#get-started" class="btn btn-light btn-lg">
+                    <i class="fas fa-arrow-down me-2"></i><span data-key="btn_get_started">Get Started</span>
+                </a>
+                <a href="/browse.html" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-search me-2"></i><span data-key="btn_view_reports">View Reports</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-12 mb-5">
+                    <h2 data-key="about_title">What is Decide Together?</h2>
+                    <p class="lead text-muted" data-key="about_description">
+                        A platform that connects citizens with their communities to report, track, and resolve local
+                        issues across Egypt.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Our Goal Section -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="card border-primary shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-bullseye fa-3x text-primary"></i>
+                            </div>
+                            <h3 class="text-center mb-3" data-key="our_goal_title">Our Goal</h3>
+                            <p class="lead text-center text-muted" data-key="our_goal_description">
+                                To create a transparent, efficient, and democratic platform that empowers Egyptian
+                                citizens
+                                to actively participate in improving their communities. We bridge the gap between
+                                citizens
+                                and local authorities, ensuring every voice is heard and every issue is addressed.
+                            </p>
+                            <div class="row mt-4">
+                                <div class="col-md-4 text-center">
+                                    <i class="fas fa-handshake fa-2x text-success mb-2"></i>
+                                    <p class="small" data-key="goal_transparency">Transparency & Accountability</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <i class="fas fa-lightbulb fa-2x text-warning mb-2"></i>
+                                    <p class="small" data-key="goal_solutions">Community-Driven Solutions</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <i class="fas fa-heart fa-2x text-danger mb-2"></i>
+                                    <p class="small" data-key="goal_better">Building a Better Egypt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card feature-card text-center p-4 border-0 shadow-sm">
+                        <div class="mb-3">
+                            <i class="fas fa-map-marked-alt fa-3x text-primary"></i>
+                        </div>
+                        <h5 data-key="feature_report_title">Report Issues</h5>
+                        <p class="text-muted" data-key="feature_report_desc">
+                            Submit reports about local problems in your area with photos and location details.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card text-center p-4 border-0 shadow-sm">
+                        <div class="mb-3">
+                            <i class="fas fa-users fa-3x text-success"></i>
+                        </div>
+                        <h5 data-key="feature_community_title">Community Engagement</h5>
+                        <p class="text-muted" data-key="feature_community_desc">
+                            Vote, comment, and discuss issues that matter to your community.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card text-center p-4 border-0 shadow-sm">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-line fa-3x text-warning"></i>
+                        </div>
+                        <h5 data-key="feature_track_title">Track Progress</h5>
+                        <p class="text-muted" data-key="feature_track_desc">
+                            Monitor the status of reported issues from submission to resolution.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login/Register Section -->
+    <section class="py-5" id="get-started">
+        <div class="container">
+            <!-- Show when NOT logged in -->
+            <div id="notLoggedInSection">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2 data-key="join_title">Join Our Community</h2>
+                        <p class="lead text-muted" data-key="join_subtitle">Choose your role to get started</p>
+                    </div>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <!-- Unified Login/Register -->
+                    <div class="col-md-6">
+                        <div class="card auth-card shadow-sm p-4">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <i class="fas fa-users fa-4x text-primary"></i>
+                                </div>
+                                <h3 data-key="get_started_title">Get Started</h3>
+                                <p class="text-muted mb-4" data-key="get_started_desc">
+                                    Join our community to report issues, vote on problems, and make a difference.
+                                </p>
+                                <div class="d-grid gap-2">
+                                    <a href="/login.html" class="btn btn-primary btn-lg" data-key="btn_login">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </a>
+                                    <a href="/register.html" class="btn btn-outline-primary" data-key="btn_register">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Show when logged in -->
+            <div id="loggedInSection" style="display: none;">
+                <div class="row text-center mb-4">
+                    <div class="col-12">
+                        <h2><span data-key="welcome_back">Welcome back</span>, <span id="welcomeUserName"></span>!</h2>
+                        <p class="lead text-muted" data-key="what_to_do_today">What would you like to do today?</p>
+                    </div>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm p-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-flag fa-3x text-primary mb-3"></i>
+                                <h5 data-key="card_report_issue">Report an Issue</h5>
+                                <p class="text-muted" data-key="card_report_desc">Submit a new report about problems in your area</p>
+                                <a href="/report.html" class="btn btn-primary" data-key="btn_create_report">Create Report</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm p-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-th-list fa-3x text-success mb-3"></i>
+                                <h5 data-key="card_browse_reports">Browse Reports</h5>
+                                <p class="text-muted" data-key="card_browse_desc">View and engage with community reports</p>
+                                <a href="/browse.html" class="btn btn-success" data-key="btn_browse">Browse</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm p-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user fa-3x text-info mb-3"></i>
+                                <h5 data-key="card_my_profile">My Profile</h5>
+                                <p class="text-muted" data-key="card_profile_desc">View your reports, comments, and votes</p>
+                                <a href="/profile.html" class="btn btn-info" data-key="btn_view_profile">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="dashboardCard" style="display: none;">
+                        <div class="card shadow-sm p-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-chart-bar fa-3x text-dark mb-3"></i>
+                                <h5 data-key="card_admin_dashboard">Admin Dashboard</h5>
+                                <p class="text-muted" data-key="card_dashboard_desc">Manage all reports and users</p>
+                                <a href="/dashboard.html" class="btn btn-dark" data-key="btn_dashboard">Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0" data-key="footer_text">
+                &copy; 2025 Decide Together - Making Egypt Better
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/confirmDialog.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Show/hide login section based on auth status
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuth = auth.isAuthenticated();
+            const isAdmin = auth.isAdmin();
+            const user = auth.getUser();
+
+            const notLoggedInSection = document.getElementById('notLoggedInSection');
+            const loggedInSection = document.getElementById('loggedInSection');
+            const welcomeUserName = document.getElementById('welcomeUserName');
+            const dashboardCard = document.getElementById('dashboardCard');
+
+            if (isAuth) {
+                // Hide login/register cards, show logged in section
+                notLoggedInSection.style.display = 'none';
+                loggedInSection.style.display = 'block';
+
+                if (welcomeUserName && user) {
+                    welcomeUserName.textContent = user.name;
+                }
+
+                // Show dashboard card for admin
+                if (isAdmin && dashboardCard) {
+                    dashboardCard.style.display = 'block';
+                }
+            } else {
+                // Show login/register cards, hide logged in section
+                notLoggedInSection.style.display = 'block';
+                loggedInSection.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

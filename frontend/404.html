@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="error_404">404 - Page Not Found | Decide Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .error-container {
+            min-height: calc(100vh - 56px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .error-content {
+            max-width: 600px;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: #0d6efd;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .error-icon {
+            font-size: 80px;
+            color: #6c757d;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #0d1b2a;
+            margin-bottom: 15px;
+        }
+
+        .error-description {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .error-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .error-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hands-helping"></i>
+                <span data-key="app_name">Decide Together</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i>
+                            <span data-key="nav_home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/browse.html">
+                            <i class="fas fa-th-large"></i>
+                            <span data-key="nav_browse">Browse Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/map.html">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span data-key="nav_map">Reports Map</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-outline-light" id="langToggle">
+                            <i class="fas fa-language"></i> 
+                            <span id="currentLang">AR</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 404 Error Content -->
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h1 class="error-code" data-key="error_404">404</h1>
+            <h2 class="error-title" data-key="page_not_found">Page Not Found</h2>
+            <p class="error-description" data-key="page_not_found_description">
+                Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+            </p>
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary error-btn">
+                    <i class="fas fa-home"></i> <span data-key="btn_go_home">Go Home</span>
+                </a>
+                <a href="/browse.html" class="btn btn-outline-primary error-btn">
+                    <i class="fas fa-list"></i> <span data-key="nav_browse">Browse Reports</span>
+                </a>
+                <a href="javascript:history.back()" class="btn btn-outline-secondary error-btn">
+                    <i class="fas fa-arrow-left"></i> <span data-key="btn_go_back">Go Back</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="js/darkMode.js"></script>
+    <script>
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', () => {
+            initLanguage();
+            
+            // Language toggle
+            document.getElementById('langToggle').addEventListener('click', () => {
+                toggleLanguage();
+            });
+        });
+    </script>
+</body>
+
+</html>

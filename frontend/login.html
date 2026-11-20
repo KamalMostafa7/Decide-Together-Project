@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="login_title">Login - Decide Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-theme .card-header {
+            background: linear-gradient(135deg, #343a40 0%, #23272b 100%) !important;
+        }
+
+        .admin-theme .btn-submit {
+            background: linear-gradient(135deg, #343a40 0%, #23272b 100%);
+            border: none;
+        }
+
+        .admin-theme .btn-submit:hover {
+            background: linear-gradient(135deg, #23272b 0%, #1a1d20 100%);
+        }
+
+        .admin-theme .icon-header {
+            color: #343a40;
+        }
+
+        .user-theme .card-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+        }
+
+        .user-theme .btn-submit {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            border: none;
+        }
+
+        .user-theme .btn-submit:hover {
+            background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
+        }
+
+        .user-theme .icon-header {
+            color: #0d6efd;
+        }
+
+        .link-text {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-text:hover {
+            text-decoration: underline;
+            color: #0a58ca;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hands-helping"></i>
+                <span data-key="app_name">Decide Together</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i>
+                            <span data-key="nav_home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/browse.html">
+                            <i class="fas fa-th-large"></i>
+                            <span data-key="nav_browse">Browse Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/map.html">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span data-key="nav_map">Reports Map</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-outline-light" id="langToggle">
+                            <i class="fas fa-language"></i> 
+                            <span id="currentLang">AR</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow" id="loginCard">
+                    <div class="card-header text-white text-center py-4">
+                        <div class="mb-2">
+                            <i class="fas fa-sign-in-alt fa-3x"></i>
+                        </div>
+                        <h3 data-key="login_heading">Login to Decide Together</h3>
+                        <p class="mb-0" data-key="login_subtitle">Sign in to access your account</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="loginAlert" class="alert d-none"></div>
+
+                        <!-- Role Switcher -->
+                        <div class="mb-4 text-center">
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="loginRole" id="roleUser" value="user" checked>
+                                <label class="btn btn-outline-primary" for="roleUser">
+                                    <i class="fas fa-user"></i> <span data-key="role_citizen">Citizen</span>
+                                </label>
+
+                                <input type="radio" class="btn-check" name="loginRole" id="roleAdmin" value="admin">
+                                <label class="btn btn-outline-dark" for="roleAdmin">
+                                    <i class="fas fa-user-shield"></i> <span data-key="role_admin">Administrator</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label" data-key="label_email">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label" data-key="label_password">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="password" required>
+                                </div>
+                            </div>
+
+                            <div class="text-end mb-3">
+                                <a href="#" id="forgotPasswordLink" class="text-muted small"
+                                    data-key="forgot_password">Forgot Password?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary text-white w-100 py-2 fw-bold"
+                                data-key="btn_login">Login</button>
+                        </form>
+
+                        <div class="text-center mt-4" id="registerSection">
+                            <p class="mb-0">
+                                <span data-key="no_account">Don't have an account?</span>
+                                <a href="/register.html" class="link-text" data-key="link_register">Register here</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" data-key="forgot_password_title">Reset Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="forgotPasswordAlert" class="alert d-none"></div>
+                    <p data-key="forgot_password_instruction">Enter your email address and we'll send you instructions
+                        to reset your password.</p>
+                    <form id="forgotPasswordForm">
+                        <div class="mb-3">
+                            <label for="resetEmail" class="form-label" data-key="label_email">Email</label>
+                            <input type="email" class="form-control" id="resetEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" data-key="btn_send_reset">Send Reset
+                            Link</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="js/darkMode.js"></script>
+    <script src="js/login.js"></script>
+    <script>
+        // Check URL parameter for role and set radio button
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role');
+        const registerSection = document.getElementById('registerSection');
+
+        if (role === 'admin') {
+            document.getElementById('roleAdmin').checked = true;
+            registerSection.style.display = 'none'; // Hide registration for admins
+        } else {
+            document.getElementById('roleUser').checked = true;
+        }
+
+        // Toggle register section based on role selection
+        document.querySelectorAll('input[name="loginRole"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'admin') {
+                    registerSection.style.display = 'none';
+                } else {
+                    registerSection.style.display = 'block';
+                }
+            });
+        });
+
+        // Forgot password functionality
+        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            const modal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+            modal.show();
+        });
+
+        document.getElementById('forgotPasswordForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const resetEmail = document.getElementById('resetEmail').value;
+            const alert = document.getElementById('forgotPasswordAlert');
+
+            // Simulate sending reset email
+            alert.className = 'alert alert-info';
+            alert.textContent = 'If an account exists with this email, you will receive password reset instructions.';
+            alert.classList.remove('d-none');
+
+            setTimeout(() => {
+                bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal')).hide();
+                document.getElementById('forgotPasswordForm').reset();
+                alert.classList.add('d-none');
+            }, 3000);
+        });
+    </script>
+</body>
+
+</html>

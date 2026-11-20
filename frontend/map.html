@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="map_page_title">Reports Map - Decide Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Custom marker styling */
+        .custom-marker {
+            background: transparent;
+            border: none;
+        }
+
+        /* Map legend styling */
+        .map-legend {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            line-height: 24px;
+            font-size: 14px;
+        }
+
+        .map-legend h6 {
+            margin: 0 0 8px 0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .legend-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .legend-icon.red { background-color: red; }
+        .legend-icon.orange { background-color: orange; }
+        .legend-icon.green { background-color: green; }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hands-helping"></i>
+                <span data-key="app_name">Decide Together</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i>
+                            <span data-key="nav_home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/browse.html">
+                            <i class="fas fa-th-large"></i>
+                            <span data-key="nav_browse">Browse Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/map.html">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span data-key="nav_map">Reports Map</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="reportNavItem" style="display:none;">
+                        <a class="nav-link" href="/report">
+                            <i class="fas fa-plus-circle"></i>
+                            <span data-key="nav_create_report">Create Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="dashboardNavItem" style="display:none;">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span data-key="nav_dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="profileNavItem" style="display:none;">
+                        <a class="nav-link" href="/profile.html">
+                            <i class="fas fa-user-circle"></i>
+                            <span data-key="nav_profile">My Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="notificationsNavItem" style="display:none;">
+                        <a class="nav-link" href="#" id="notificationsLink">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge bg-danger" id="notificationBadge" style="display:none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span data-key="nav_login">Login</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="registerNavItem">
+                        <a class="nav-link" href="/register">
+                            <i class="fas fa-user-plus"></i>
+                            <span data-key="nav_register">Register</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown" id="userNavItem" style="display:none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span data-key="nav_logout">Logout</span>
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-outline-light" id="langToggle">
+                            <i class="fas fa-language"></i> 
+                            <span id="currentLang">AR</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 data-key="filters_title">Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" data-key="label_governorate">Governorate</label>
+                            <select class="form-select" id="governorateFilter">
+                                <option value="" data-key="filter_all_governorates">All Governorates</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-key="filter_category">Category</label>
+                            <select class="form-select" id="categoryFilter">
+                                <option value="" data-key="filter_all">All</option>
+                                <option value="infrastructure" data-key="category_infrastructure">Infrastructure
+                                </option>
+                                <option value="cleanliness" data-key="category_cleanliness">Cleanliness</option>
+                                <option value="safety" data-key="category_safety">Safety</option>
+                                <option value="utilities" data-key="category_utilities">Utilities</option>
+                                <option value="other" data-key="category_other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-key="filter_status">Status</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="" data-key="filter_all">All</option>
+                                <option value="open" data-key="status_open">Open</option>
+                                <option value="in_progress" data-key="status_in_progress">In Progress</option>
+                                <option value="resolved" data-key="status_resolved">Resolved</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary w-100" id="applyFilters" data-key="btn_apply_filters">Apply
+                            Filters</button>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h5 data-key="stats_title">Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <small data-key="stats_total">Total Reports:</small>
+                            <strong id="totalReports">0</strong>
+                        </div>
+                        <div class="mb-2">
+                            <small data-key="stats_open">Open:</small>
+                            <strong id="openReports" class="text-danger">0</strong>
+                        </div>
+                        <div class="mb-2">
+                            <small data-key="stats_in_progress">In Progress:</small>
+                            <strong id="inProgressReports" class="text-warning">0</strong>
+                        </div>
+                        <div>
+                            <small data-key="stats_resolved">Resolved:</small>
+                            <strong id="resolvedReports" class="text-success">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 data-key="map_title">Reports Map</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="map" style="height: 600px;"></div>
+                    </div>
+                </div>
+
+                <!-- Reports List -->
+                <div class="card mt-3">
+                    <div class="card-header bg-primary text-white">
+                        <h5 data-key="recent_reports_title">Recent Reports</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="reportsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Details Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="reportModalBody">
+                    <!-- Report details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/governorates.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/confirmDialog.js"></script>
+    <script src="js/map.js"></script>
+    <script>
+        // Initialize map page
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+            populateGovernorateFilterMain();
+            initMap();
+
+            // Apply filters
+            document.getElementById('applyFilters').addEventListener('click', loadReports);
+
+            // Load notifications if authenticated
+            if (auth.isAuthenticated()) {
+                loadNotifications();
+                setInterval(loadNotifications, 30000);
+            }
+        });
+
+        // Populate governorate filter
+        function populateGovernorateFilterMain() {
+            const governorateFilter = document.getElementById('governorateFilter');
+            if (!governorateFilter || typeof getGovernoratesList !== 'function') return;
+
+            const governorates = getGovernoratesList();
+            const currentLang = localStorage.getItem('language') || 'en';
+
+            governorates.forEach(gov => {
+                const option = document.createElement('option');
+                option.value = gov;
+                option.textContent = getGovernorateName(gov, currentLang);
+                governorateFilter.appendChild(option);
+            });
+        }
+
+        // Load notifications
+        async function loadNotifications() {
+            if (!auth.isAuthenticated()) return;
+
+            try {
+                const response = await auth.fetchWithAuth(config.endpoints.notifications.all);
+                const data = await response.json();
+                const notifications = data.notifications || [];
+
+                const unreadCount = notifications.filter(n => !n.is_read).length;
+                const badge = document.getElementById('notificationBadge');
+
+                if (badge) {
+                    if (unreadCount > 0) {
+                        badge.textContent = unreadCount;
+                        badge.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load notifications:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="browse_reports_title">Browse Reports - Decide Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-header h1 {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .page-header h1 i {
+            font-size: 2.5rem;
+        }
+        
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .report-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.15);
+            border-color: #0d6efd;
+        }
+        
+        .report-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #0d6efd, #0a58ca);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .report-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .report-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .report-content {
+            padding: 15px;
+        }
+
+        .report-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0d1b2a;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .report-meta {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #606060;
+            margin-bottom: 8px;
+        }
+
+        .report-meta i {
+            margin-right: 5px;
+        }
+
+        .report-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #606060;
+        }
+
+        .report-description {
+            font-size: 13px;
+            color: #606060;
+            margin: 8px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .filters-bar {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .filters-bar .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filters-bar .form-label i {
+            color: #0d6efd;
+        }
+        
+        .filters-bar .form-select,
+        .filters-bar .form-control {
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .filters-bar .form-select:focus,
+        .filters-bar .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+        }
+        
+        .filters-bar .btn {
+            border-radius: 10px;
+            padding: 0.6rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filters-bar .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        }
+
+        .status-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-badge i {
+            font-size: 10px;
+        }
+        
+        /* RTL Support */
+        html[dir="rtl"] .report-meta i,
+        html[dir="rtl"] .report-stats i,
+        html[dir="rtl"] .status-badge i {
+            margin-left: 5px;
+            margin-right: 0;
+        }
+
+        .modal-thumbnail {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .comment-section {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .comment-item {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vote-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .vote-btn.active {
+            background: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hands-helping"></i>
+                <span data-key="app_name">Decide Together</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i>
+                            <span data-key="nav_home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/browse.html">
+                            <i class="fas fa-th-large"></i>
+                            <span data-key="nav_browse">Browse Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/map.html">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span data-key="nav_map">Reports Map</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="reportNavItem" style="display:none;">
+                        <a class="nav-link" href="/report">
+                            <i class="fas fa-plus-circle"></i>
+                            <span data-key="nav_create_report">Create Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="dashboardNavItem" style="display:none;">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span data-key="nav_dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="profileNavItem" style="display:none;">
+                        <a class="nav-link" href="/profile.html">
+                            <i class="fas fa-user-circle"></i>
+                            <span data-key="nav_profile">My Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span data-key="nav_login">Login</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="registerNavItem">
+                        <a class="nav-link" href="/register">
+                            <i class="fas fa-user-plus"></i>
+                            <span data-key="nav_register">Register</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown" id="userNavItem" style="display:none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span data-key="nav_logout">Logout</span>
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-outline-light" id="langToggle">
+                            <i class="fas fa-language"></i> 
+                            <span id="currentLang">AR</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>
+                <i class="fas fa-th-large"></i>
+                <span data-key="browse_reports_heading">Browse All Reports</span>
+            </h1>
+            <p class="lead mb-0" data-key="browse_reports_description">Explore reported issues from across Egypt</p>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+
+        <!-- Search Bar -->
+        <div class="filters-bar mb-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="form-label">
+                        <i class="fas fa-search"></i>
+                        <span data-key="search_reports">Search Reports</span>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="fas fa-search text-primary"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by title or description..." data-key="search_placeholder">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="filters-bar">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span data-key="label_governorate">Governorate</span>
+                    </label>
+                    <select class="form-select" id="browseGovernorateFilter">
+                        <option value="" data-key="filter_all_governorates">All Governorates</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        <span data-key="filter_category">Category</span>
+                    </label>
+                    <select class="form-select" id="browseCategoryFilter">
+                        <option value="" data-key="filter_all">All</option>
+                        <option value="infrastructure" data-key="category_infrastructure">Infrastructure</option>
+                        <option value="cleanliness" data-key="category_cleanliness">Cleanliness</option>
+                        <option value="safety" data-key="category_safety">Safety</option>
+                        <option value="utilities" data-key="category_utilities">Utilities</option>
+                        <option value="other" data-key="category_other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">
+                        <i class="fas fa-info-circle"></i>
+                        <span data-key="filter_status">Status</span>
+                    </label>
+                    <select class="form-select" id="browseStatusFilter">
+                        <option value="" data-key="filter_all">All</option>
+                        <option value="open" data-key="status_open">Open</option>
+                        <option value="in_progress" data-key="status_in_progress">In Progress</option>
+                        <option value="resolved" data-key="status_resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">
+                        <i class="fas fa-sort"></i>
+                        <span data-key="sort_by">Sort By</span>
+                    </label>
+                    <select class="form-select" id="browseSortFilter">
+                        <option value="newest" data-key="sort_newest">Newest First</option>
+                        <option value="oldest" data-key="sort_oldest">Oldest First</option>
+                        <option value="most_voted" data-key="sort_most_voted">Most Voted</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Count -->
+        <div class="mb-3">
+            <h5><span id="reportsCount">0</span> <span data-key="reports_found">reports found</span></h5>
+        </div>
+
+        <!-- Reports Grid -->
+        <div class="report-grid" id="reportsGrid">
+            <!-- Reports will be loaded here -->
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="text-center py-5" id="loadingSpinner" style="display:none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- No Reports Message -->
+        <div class="text-center py-5" id="noReports" style="display:none;">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <p class="text-muted" data-key="no_reports_found">No reports found</p>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Reports pagination" id="paginationContainer" style="display:none;">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination buttons will be generated here -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Report Detail Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalReportTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalReportImage" class="modal-thumbnail mb-3" alt="Report Image">
+
+                    <div class="mb-3">
+                        <span class="badge bg-secondary me-2" id="modalReportGovernorate"></span>
+                        <span class="badge bg-info me-2" id="modalReportCategory"></span>
+                        <span class="status-badge" id="modalReportStatus"></span>
+                    </div>
+
+                    <p id="modalReportDescription" class="mb-3"></p>
+
+                    <div id="modalSolutionSection" class="mb-3" style="display:none;">
+                        <h6 data-key="label_solution">Suggested Solution</h6>
+                        <p id="modalReportSolution" class="text-muted"></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="fas fa-user"></i> <span id="modalReportUser"></span> •
+                            <i class="fas fa-calendar"></i> <span id="modalReportDate"></span> •
+                            <i class="fas fa-map-marker-alt"></i> <span id="modalReportCity"></span>
+                        </small>
+                    </div>
+
+                    <!-- Report URL Section -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-link"></i> <span data-key="report_url">Report URL</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="reportUrlInput" readonly>
+                            <button class="btn btn-outline-primary" type="button" id="copyUrlBtn"
+                                onclick="copyReportUrl()">
+                                <i class="fas fa-copy"></i> <span data-key="copy_url">Copy</span>
+                            </button>
+                        </div>
+                        <small class="text-muted" data-key="share_report_help">Share this link to let others view this
+                            report</small>
+                    </div>
+
+                    <!-- Voting Section -->
+                    <div class="vote-buttons mb-4" id="voteSection" style="display:none;">
+                        <button class="vote-btn" id="upvoteBtn">
+                            <i class="fas fa-thumbs-up"></i> <span id="upvoteCount">0</span>
+                        </button>
+                        <button class="vote-btn" id="downvoteBtn">
+                            <i class="fas fa-thumbs-down"></i> <span id="downvoteCount">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Edit and Delete Report Section (Only for report owner or admin) -->
+                    <div class="mb-4 d-flex gap-2" id="reportActionsSection" style="display:none;">
+                        <button class="btn btn-primary btn-sm" id="editReportBtn" onclick="openEditReportModal()" style="display:none;">
+                            <i class="fas fa-edit"></i> <span data-key="btn_edit_report">Edit Report</span>
+                        </button>
+                        <button class="btn btn-danger btn-sm" id="deleteReportBtn" onclick="deleteReport()">
+                            <i class="fas fa-trash"></i> <span data-key="btn_delete_report">Delete Report</span>
+                        </button>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="mb-3">
+                        <h6 data-key="comments_title">Comments</h6>
+                        <div class="comment-section" id="commentsSection">
+                            <!-- Comments will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Add Comment -->
+                    <div id="addCommentSection" style="display:none;">
+                        <textarea class="form-control mb-2" id="commentText" rows="2" data-key="add_comment_placeholder"
+                            placeholder="Add a comment..."></textarea>
+                        <button class="btn btn-primary btn-sm" id="submitCommentBtn" data-key="btn_add_comment">Add
+                            Comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Report Modal -->
+    <div class="modal fade" id="editReportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editReportForm">
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" id="editTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="editDescription" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Suggested Solution</label>
+                            <textarea class="form-control" id="editSolution" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="editCategory" required>
+                                    <option value="infrastructure">Infrastructure</option>
+                                    <option value="cleanliness">Cleanliness</option>
+                                    <option value="safety">Safety</option>
+                                    <option value="utilities">Utilities</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Governorate</label>
+                                <select class="form-select" id="editGovernorate" required></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" id="editCity">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="editAddress">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Latitude</label>
+                                <input type="number" step="any" class="form-control" id="editLatitude" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Longitude</label>
+                                <input type="number" step="any" class="form-control" id="editLongitude" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="editImageUrl">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEditedReport()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/governorates.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/confirmDialog.js"></script>
+    <script src="js/browse.js"></script>
+</body>
+
+</html>
