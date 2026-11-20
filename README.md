@@ -58,7 +58,7 @@ npm install
 
 git clone <repository-url>npm start
 
-cd "Project (Dr Mona)"```
+cd "Project Decide Together"```
 
 ```
 
